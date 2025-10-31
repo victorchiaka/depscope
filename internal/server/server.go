@@ -28,3 +28,8 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(graphJson)
 }
+
+func Web(w http.ResponseWriter, r *http.Request) {
+	// We'll serve the html file here
+	http.ServeFile(w, r, "web/index.html")
+}

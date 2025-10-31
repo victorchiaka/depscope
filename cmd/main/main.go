@@ -1,14 +1,21 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/victorchiaka/depscope/internal/server"
+	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/", server.Root)
-	log.Println("Server listening on :1010")
-	log.Fatal(http.ListenAndServe(":4000", nil))
+	// API endpoint - returns JSON
+	http.HandleFunc("/api/graph", server.Root)
+
+	// Serve the web page
+	http.HandleFunc("/", server.Web)
+
+	// Serve static files (CSS and JS)
+	fs := http.FileServer(http.Dir("web"))
+	http.Handle("/script.js", fs)
+	http.Handle("/style.css", fs)
+
+	http.ListenAndServe(":4000", nil)
 }
