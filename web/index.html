@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Depscope - Go Dependency Visualization tool</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2d3748;
+        --primary-hover: #1a202c;
+        --background: #f7fafc;
+        --surface: #ffffff;
+        --border: #e2e8f0;
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --muted: #718096;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+        --transition: all 0.15s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background-color: var(--background);
+        color: var(--text-primary);
+        line-height: 1.5;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      nav {
+        background: var(--surface);
+        padding: 0.5rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        box-shadow: var(--shadow-md);
+      }
+
+      .nav-title {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-primary);
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .nav-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      #search,
+      #filter {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        background-color: var(--surface);
+        height: 36px;
+      }
+
+      #search {
+        width: 200px;
+        min-width: 180px;
+      }
+
+      #search:focus,
+      #filter:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px var(--primary);
+      }
+
+      .layoutToggle {
+        padding: 0.4rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background-color: transparent;
+        cursor: pointer;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: var(--transition);
+      }
+
+      .layoutToggle:active {
+        transform: translateY(1px);
+      }
+
+      #graph {
+        background: var(--surface);
+        overflow: auto;
+        flex: 1;
+        margin: 0;
+        position: relative;
+        border-top: 1px solid var(--border);
+      }
+
+      /* Graph node styling */
+      .node {
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .node circle {
+        stroke: var(--surface);
+        stroke-width: 1.5;
+      }
+
+      .node text {
+        font-family: "Inter", sans-serif;
+        font-size: 0.75rem;
+        fill: var(--text-primary);
+        font-weight: 500;
+      }
+
+      .link {
+        stroke: #e2e8f0;
+        stroke-opacity: 0.8;
+        stroke-width: 1.2;
+      }
+
+      .link:hover {
+        stroke-opacity: 0.9;
+      }
+
+      @media (max-width: 768px) {
+        html {
+          font-size: 15px;
+        }
+        nav {
+          flex-direction: column;
+          padding: 12px 1rem;
+          gap: 12px;
+        }
+        .nav-controls {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          gap: 8px;
+          width: 100%;
+        }
+        .nav-controls > * {
+          margin: 0;
+        }
+        #search {
+          width: 100%;
+          min-width: 0;
+        }
+        #filter {
+          min-width: 120px;
+        }
+        .layoutToggle {
+          white-space: nowrap;
+          padding: 8px 12px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-controls {
+          grid-template-columns: 1fr;
+        }
+        #filter,
+        .layoutToggle {
+          width: 100%;
+        }
+      }
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-title">Depscope - Visualizer</div>
+      <div class="nav-controls">
+        <input type="text" id="search" placeholder="Search modules..." />
+        <select id="filter">
+          <option value="all">All Dependencies</option>
+          <option value="direct">Direct Only</option>
+          <option value="indirect">Indirect Only</option>
+        </select>
+        <button id="layoutToggle" class="layoutToggle">Organize Look</button>
+      </div>
+    </nav>
+
+    <div id="graph"></div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
