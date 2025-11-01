@@ -1,21 +1,30 @@
 package main
 
 import (
-	"github.com/victorchiaka/depscope/internal/server"
+	"flag"
+	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/victorchiaka/depscope/internal/server"
 )
 
 func main() {
-	// API endpoint - returns JSON
-	http.HandleFunc("/api/graph", server.Root)
+	port := flag.String("port", "4000", "Port to run server on")
+	flag.Parse()
 
-	// Serve the web page
-	http.HandleFunc("/", server.Web)
-
-	// Serve static files (CSS and JS)
+	// Serve static files
 	fs := http.FileServer(http.Dir("web"))
 	http.Handle("/script.js", fs)
 	http.Handle("/style.css", fs)
 
-	http.ListenAndServe(":4000", nil)
+	// API endpoint
+	http.HandleFunc("/api/graph", server.Root)
+
+	// Web page
+	http.HandleFunc("/", server.Web)
+
+	addr := ":" + *port
+	fmt.Printf("🔍 Depscope running at http://localhost%s\n", addr)
+	log.Fatal(http.ListenAndServe(addr, nil))
 }
