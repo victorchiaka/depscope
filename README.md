@@ -23,6 +23,18 @@ Open `http://localhost:4000` in your browser.
 depscope -port 8080
 ```
 
+## Contributing
+
+1. Clone and create a feature branch:
+```bash
+git clone https://github.com/victorchiaka/depscope.git
+git checkout -b feature/your-feature
+```
+
+2. Create a PR with:
+   - Brief feature description
+   - Short demo video/gif showing the feature in action
+
 ## Development
 
 ```bash
@@ -31,5 +43,4 @@ go run ./cmd/depscope -port 8080
 ```
 
 ## License
-
 MIT
