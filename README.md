@@ -34,6 +34,7 @@ git checkout -b feature/your-feature
 2. Create a PR with:
    - Brief feature description
    - Short demo video/gif showing the feature in action
+   - Ensure tests pass
 
 ## Development
 
